@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<meta name="description" content="An interactive cycle-by-cycle RISC vs CISC computer architecture teaching simulator.">
+<title>ISA LAB — CISC vs RISC Interactive Simulator</title>
+<style>
+:root{--bg:#07111f;--surface:#0d1b2c;--surface2:#122238;--surface3:#152940;--line:#233a52;--text:#eff5ff;--muted:#90a5ba;--soft:#658199;--r:#51e0b6;--c:#b4a0ff;--amber:#ffc978;--red:#fd8396;--font:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 1000px 450px at 85% -250px,#1a3156 0,transparent 95%),var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.48}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid #b2d8ff;outline-offset:3px}a{color:#a1d6fb}button:disabled{opacity:.35;cursor:not-allowed}.app{max-width:1640px;margin:auto;padding:0 29px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:25px 0 24px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:14px}.mark{width:43px;height:43px;border-radius:12px;border:1px solid #396080;background:linear-gradient(135deg,#1c4260,#102333);display:grid;place-items:center;color:#a5f8d9;font-family:var(--mono);font-weight:900;font-size:19px;box-shadow:inset 0 1px #6593a733}.brandname{font-weight:800;font-size:16px;letter-spacing:.16em;line-height:1}.brandname b{color:var(--r)}.brandlabel{color:var(--muted);font-size:11px;margin-top:5px;letter-spacing:.035em}.top-right{display:flex;align-items:center;gap:14px}.dot{width:7px;height:7px;background:var(--r);display:inline-block;border-radius:50%;box-shadow:0 0 0 5px #51e0b617}.online{color:#b4cadc;font-size:11px;display:flex;gap:10px;align-items:center}.ghost{color:#d5e3f2;border:1px solid var(--line);background:#132439;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700;transition:.15s}.ghost:hover{border-color:#6584a4;background:#1a314b}.intro{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;padding:30px 0 26px}.eyebrow{font-family:var(--mono);color:var(--r);font-size:11px;letter-spacing:.13em;font-weight:700;text-transform:uppercase}.intro h1{font-size:clamp(27px,3vw,43px);letter-spacing:-.055em;line-height:1.1;margin:10px 0 10px;font-weight:790}.intro h1 span{color:var(--r)}.intro h1 em{color:var(--c);font-style:normal}.intro p{color:var(--muted);margin:0;max-width:800px;font-size:14px}.section-sub{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--soft);font-weight:800}.scenario-wrap{background:#0e1d30;border:1px solid var(--line);border-radius:16px;padding:18px 20px 20px;margin-bottom:18px}.scenario-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.scenarios{display:flex;gap:9px;flex-wrap:wrap}.scenario-button{border-radius:9px;color:#b9cada;border:1px solid #294159;background:#0d1b2b;padding:11px 17px;text-align:left;font-size:13px;font-weight:720;transition:.18s}.scenario-button:hover{background:#1c344c}.scenario-button.active{border-color:#4abf9e;background:#173d3c;color:#d7ffee;box-shadow:inset 0 0 0 1px #51e0b618}.scenario-button small{color:var(--soft);display:block;font:10px var(--mono);margin-top:3px}.scenario-button.active small{color:#8acbb7}.scenario-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-top:19px;flex-wrap:wrap}.task{flex:1;min-width:230px}.task-title{font-size:12px;color:#a4b9ca;margin-bottom:6px}.task-code{font:600 16px var(--mono);color:#f5f8ff;letter-spacing:-.025em;word-break:break-word}.task-code strong{color:#ffcd81}.fields{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.field{display:flex;gap:5px;flex-direction:column}.field label{color:var(--muted);font:10px var(--mono);letter-spacing:.04em}.field input{background:#081625;border:1px solid #33506b;color:#f4f7fd;border-radius:8px;padding:9px 9px;font:13px var(--mono);width:67px;min-height:39px}.switches{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid #21374d}.switch-label{color:var(--muted);font-size:12px}.toggle{padding:6px 12px;border-radius:999px;border:1px solid #36546c;background:#152840;color:#c0d3e5;font:700 11px var(--mono)}.toggle.active{background:#16473f;color:#81edc3;border-color:#2a9b7a}.switch-hint{font-size:11px;color:var(--soft);margin-left:1px}.controlbar{background:linear-gradient(115deg,#12243a,#101e31);border:1px solid #30475f;border-radius:16px;padding:17px 20px;display:flex;align-items:center;gap:18px;margin-bottom:18px;flex-wrap:wrap}.transport{display:flex;align-items:center;gap:7px}.circle-btn{background:#20334b;border:1px solid #3b5570;color:#edf7ff;width:39px;height:39px;border-radius:9px;display:grid;place-items:center;font-size:17px;transition:.16s}.circle-btn:hover{background:#2b4664}.play{background:var(--r);color:#08251d;border:1px solid #78eacd;min-width:90px;border-radius:9px;height:40px;font-weight:850;display:flex;align-items:center;justify-content:center;gap:7px}.play:hover{background:#93f4d6}.cyclecount{min-width:116px}.cyclecount strong{font:750 27px var(--mono);letter-spacing:-.045em}.cyclecount span{color:#91a9bd;font:12px var(--mono)}.progress{flex:1;min-width:160px}.progress label{font-size:10px;display:flex;justify-content:space-between;color:#9ab0c5;margin-bottom:7px}.progress input{width:100%;accent-color:var(--r);cursor:pointer}.speed{display:flex;align-items:center;gap:8px}.speed label{font-size:11px;color:var(--muted)}.speed select{border:1px solid #36506a;background:#0c192a;border-radius:8px;color:#dce9f5;padding:9px;font:12px var(--mono)}.totals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.metric{background:#0e1d2f;border:1px solid var(--line);border-radius:13px;padding:14px 17px;position:relative;overflow:hidden}.metric:before{position:absolute;left:0;top:0;height:100%;width:3px;background:#4f7390;content:""}.metric.r:before{background:var(--r)}.metric.c:before{background:var(--c)}.metric.warn:before{background:var(--amber)}.metriclabel{font-size:11px;color:#a6bed0;font-weight:650;margin-bottom:8px}.metricvalue{font:750 clamp(18px,2vw,28px) var(--mono);letter-spacing:-.035em}.metricsmall{font-size:11px;color:var(--soft);margin-top:4px}.dual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}.cpu{border:1px solid var(--line);border-radius:16px;background:#0c1a2a;min-width:0;overflow:hidden;position:relative}.cpu.risc{--accent:var(--r);--accentbg:#163b39;--accentdim:#5ab39b}.cpu.cisc{--accent:var(--c);--accentbg:#2d2850;--accentdim:#8b7dc2}.cpu:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}.cpu-head{padding:20px 22px 17px;border-bottom:1px solid #22394d;display:flex;justify-content:space-between;gap:12px}.chiplabel{font:700 10px var(--mono);text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:6px}.cpu h2{margin:0;font-size:25px;letter-spacing:-.045em}.cpu h2 small{font-size:11px;color:#99b0c3;font-weight:550;display:block;letter-spacing:0;margin-top:2px}.cpu-badge{align-self:flex-start;border:1px solid var(--accentdim);color:var(--accent);background:var(--accentbg);padding:6px 9px;font:700 10px var(--mono);border-radius:7px;white-space:nowrap}.cpu-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:13px 20px;border-bottom:1px solid #22394d;gap:10px}.cpu-stat span{display:block;color:var(--soft);font:10px var(--mono)}.cpu-stat b{font:700 18px var(--mono);color:#f0f6fe}.cpu-stat b.accent{color:var(--accent)}.cpu-body{padding:18px 20px 20px}.subhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.subhead h3{margin:0;color:#c0d1e0;font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:780}.subhead span{font:10px var(--mono);color:var(--soft)}.stage-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-bottom:12px}.stage{height:94px;border:1px solid #2b4359;border-radius:10px;background:#101f30;min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 3px;position:relative;transition:all .18s}.stage-name{color:#7895ae;font:650 11px var(--mono)}.stage-code{color:#4f6d85;font-size:11px;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;font-family:var(--mono)}.stage.active{background:var(--accentbg);border-color:var(--accentdim);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 12%,transparent),0 0 27px color-mix(in srgb,var(--accent) 11%,transparent)}.stage.active .stage-name{color:var(--accent)}.stage.active .stage-code{color:white;font-weight:740}.stage.stalled{border-color:#d6a252;background:#3b3025}.stage.stalled .stage-name{color:#ffd38d}.stage.stalled .stage-code{color:#ffd38d}.stage:after{content:"›";position:absolute;right:-7px;top:39px;color:#476178;font-size:18px;z-index:2}.stage:last-child:after{display:none}.activity{height:51px;display:flex;gap:9px;align-items:center;border:1px solid #30465c;border-radius:10px;padding:10px 12px;background:#102237;margin-bottom:20px}.activity-pulse{height:9px;width:9px;background:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 12%,transparent);border-radius:100%;flex-shrink:0}.activity.idle .activity-pulse{background:#597184;box-shadow:none}.activity .act-label{color:#cbd9e6;font-size:11px;line-height:1.3;min-width:0}.activity .act-label b{color:var(--accent)}.program{border:1px solid #284157;border-radius:11px;overflow:hidden;margin-bottom:19px;background:#0a1726}.program-h{display:flex;justify-content:space-between;padding:11px 13px;background:#132439;border-bottom:1px solid #2a4359;color:#aabfd3;font:10px var(--mono)}.ins{width:100%;border:0;border-bottom:1px solid #1a3043;background:transparent;color:#b1c2d1;padding:10px 12px;display:flex;align-items:center;gap:10px;text-align:left;transition:.15s}.ins:last-child{border-bottom:0}.ins:hover{background:#172b41}.ins.current{background:var(--accentbg);color:#ecfbf5;box-shadow:inset 3px 0 var(--accent)}.ins.past{color:#7e978f}.ins .ins-n{flex:0 0 25px;color:#6e889e;font:10px var(--mono)}.ins.current .ins-n{color:var(--accent)}.ins code{font:11.5px var(--mono);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ins .ins-status{font:9px var(--mono);color:#68839c;flex-shrink:0}.ins.current .ins-status{color:var(--accent)}.ins.past .ins-status{color:#88b9a6}.ins.past code{opacity:.8}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.state-box{border:1px solid #294056;border-radius:11px;padding:12px;background:#0b1828;min-width:0}.state-label{font:650 10px var(--mono);letter-spacing:.11em;color:#86a0b6;margin-bottom:12px}.state-line{display:flex;justify-content:space-between;align-items:center;gap:7px;margin-bottom:9px;font:12px var(--mono)}.state-line:last-child{margin-bottom:0}.state-line .addr{color:#8da6bb;white-space:nowrap}.state-line .value{color:#e7eff8;font-weight:750;white-space:nowrap}.state-line.changed .value{color:var(--accent);text-shadow:0 0 20px color-mix(in srgb,var(--accent) 20%,transparent)}.state-line.changed .addr{color:var(--accent)}.state-line .value.empty{color:#576f87}.state-line .value.unchanged{color:#f4f7fb}.state-line .value .arrow{color:#607b90;font-size:10px}.bottom{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:16px;margin-top:18px}.panel{background:#0d1c2e;border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}.panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:15px}.panel-title h3{font-size:15px;margin:0;letter-spacing:-.015em}.panel-title p{font-size:11px;color:var(--muted);margin:4px 0 0}.legend{display:flex;flex-wrap:wrap;gap:10px;font:10px var(--mono);color:#9eb1c4;align-items:center}.legend .swatch{width:9px;height:9px;display:inline-block;border-radius:2px;margin-right:4px}.timeline-scroll{width:100%;overflow:auto;max-height:445px;border:1px solid #274157;border-radius:10px;scrollbar-color:#42617c #102237}.timeline{border-collapse:separate;border-spacing:0;font:10px var(--mono);width:max-content;min-width:100%;background:#0b1929}.timeline th,.timeline td{height:30px;min-width:35px;text-align:center;border-right:1px solid #1d3448;border-bottom:1px solid #1d3448;padding:0 4px;white-space:nowrap}.timeline th{background:#152941;color:#83a2b9;font-weight:650;position:sticky;top:0;z-index:2}.timeline th.first,.timeline td.first{min-width:125px;width:125px;max-width:125px;text-align:left;padding:0 9px;position:sticky;left:0;z-index:3;background:#132539;border-right:1px solid #39566b;overflow:hidden;text-overflow:ellipsis}.timeline th.first{z-index:4}.timeline td.first .side-r{color:var(--r)}.timeline td.first .side-c{color:var(--c)}.timeline .separate td{background:#0b1826;height:10px;min-height:10px;padding:0;border-bottom:1px solid #35506c}.timeline .s-F{background:#254464;color:#c2dfff}.timeline .s-D{background:#285177;color:#d6edff}.timeline .s-E{background:#177762;color:#bbf7df}.timeline .s-M{background:#846735;color:#ffdf9b}.timeline .s-W{background:#5b4d91;color:#e4d8ff}.timeline .s-S{background:#633e29;color:#ffcd87}.timeline .s-CF{background:#4b3d7e;color:#e6dafa}.timeline .s-CD{background:#5d428c;color:#f0dafa}.timeline .s-CE{background:#48729e;color:#f2f8ff}.timeline .s-CM{background:#80633e;color:#ffe0ad}.timeline .s-CW{background:#7c4da3;color:#f9dbff}.timeline .now{outline:2px solid #e8f5ff;outline-offset:-2px;z-index:1;position:relative}.timeline .future{opacity:.35}.timeline td[data-cycle]{cursor:pointer}.timeline td[data-cycle]:hover{outline:1px solid white;outline-offset:-1px}.insight{padding:14px;border-radius:11px;border:1px solid #39516c;background:linear-gradient(130deg,#142b43,#112238);margin-bottom:14px}.insight .eyebrow{font-size:10px}.insight h4{font-size:15px;margin:7px 0 7px;line-height:1.3}.insight p{font-size:12px;color:#b1c7d8;margin:0}.log{margin-top:13px;display:flex;flex-direction:column;gap:9px}.log-row{border-left:2px solid #3a5571;padding-left:11px;line-height:1.4;font-size:11px;color:#a6bfd3}.log-row.r{border-color:var(--r)}.log-row.c{border-color:var(--c)}.log-row span{display:inline-block;min-width:47px;font:700 10px var(--mono);color:#b7c8d8}.completed{display:flex;gap:7px;align-items:center;color:#adf6dc;background:#153e34;border:1px solid #29825f;border-radius:9px;padding:10px 12px;margin-top:13px;font-size:12px;font-weight:700}.primer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}.primer-card{padding:17px;background:#0e1d2e;border:1px solid var(--line);border-radius:13px}.primer-card b{font-size:13px}.primer-card p{font-size:11px;color:#9fb5c8;line-height:1.65;margin:8px 0 0}.cap{display:inline-block;color:#87a2bc;font:10px var(--mono);margin-bottom:9px}.foot{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;padding-top:21px;margin-top:23px;border-top:1px solid #22394d;color:#7891a5;font-size:11px}.foot p{margin:0;max-width:990px}.foot a{color:#86bbdd;text-decoration:none}.foot a:hover{text-decoration:underline}.quiz{margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:17px 20px;background:#111f32;border:1px solid #2b4560;border-radius:12px}.quiz .q{flex:1;min-width:235px;font-size:12px;color:#cfdeeb}.quiz .q strong{display:block;color:#91aabd;font:10px var(--mono);text-transform:uppercase;margin-bottom:5px}.quiz button{padding:8px 12px;border-radius:8px;border:1px solid #45607b;background:#162d46;color:#c9dae8;font-size:11px;font-weight:750}.quiz button:hover{background:#27405a}.quiz button.selected{border-color:var(--r);background:#1a4a3e;color:#b1f6dc}.quiz-feedback{flex-basis:100%;font-size:11px;color:#d3e3ec;margin-top:1px;display:none}.quiz-feedback.show{display:block}.quiz-feedback.good{color:#9cf0cf}.quiz-feedback.bad{color:#ffcf93}.hidden{display:none!important}@media(max-width:1100px){.dual{grid-template-columns:1fr}.cpu-body{padding:18px}.bottom{grid-template-columns:1fr}.intro{align-items:flex-start}.totals{grid-template-columns:repeat(2,1fr)}}@media(max-width:630px){.app{padding:0 12px 35px}.top{padding:15px 0}.online{display:none}.intro{padding:22px 0}.intro h1{font-size:31px}.intro p{font-size:12px}.scenario-wrap,.panel,.cpu-head,.cpu-body,.controlbar{padding:14px}.scenario-button{flex:1 1 120px;padding:9px}.cpu-stats{padding:12px}.stage{height:75px}.stage-name{font-size:10px}.stage-code{font-size:9px}.metric{padding:11px}.metriclabel{font-size:10px}.cpu h2{font-size:22px}.totals{gap:8px}.state-grid{gap:7px}.state-box{padding:10px 8px}.state-line{font-size:10px}.primer{grid-template-columns:1fr}.foot{flex-direction:column}.circle-btn{width:35px;height:37px}.play{min-width:79px}.controlbar{gap:12px}.cpu-badge{white-space:normal;text-align:center}.quiz{padding:13px}.timeline th.first,.timeline td.first{min-width:102px;max-width:102px;width:102px}.speed{margin-left:auto}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="mark">⟨/⟩</div><div><div class="brandname">ISA <b>LAB</b></div><div class="brandlabel">COMPUTER ARCHITECTURE · INTERACTIVE EXPLORER</div></div></div>
+    <div class="top-right"><div class="online"><i class="dot"></i> LOCAL SIMULATION ENGINE</div><button class="ghost" id="fullscreen" title="Toggle full screen">⛶ &nbsp; Presentation mode</button></div>
+  </header>
+  <section class="intro"><div><div class="eyebrow">01 / INSTRUCTION SET ARCHITECTURES</div><h1>Two architectures. <span>One task.</span><br><em>Different journeys.</em></h1><p>Run identical workloads on two illustrative CPU designs. Watch instructions move, registers change, memory update, and cycles accumulate—in parallel, one clock tick at a time.</p></div></section>
+  <section class="scenario-wrap" aria-label="Experiment configuration">
+    <div class="scenario-head"><div class="section-sub">Choose a workload</div><div class="section-sub" id="exp-id">EXPERIMENT 01 / 03</div></div>
+    <div class="scenarios" role="group" aria-label="Workload">
+      <button class="scenario-button active" data-case="add" aria-pressed="true">01 · Add two values<small>Memory → ALU → result</small></button>
+      <button class="scenario-button" data-case="scale" aria-pressed="false">02 · Scale the sum<small>Arithmetic + shift</small></button>
+      <button class="scenario-button" data-case="copy" aria-pressed="false">03 · Copy three words<small>Repeated memory transfer</small></button>
+    </div>
+    <div class="scenario-bottom"><div class="task"><div class="task-title">MISSION / Both CPUs must produce exactly the same output</div><div class="task-code" id="task-code"></div></div><div class="fields" id="input-fields"></div></div>
+    <div class="switches"><span class="switch-label">RISC data forwarding</span><button class="toggle active" id="forward" aria-pressed="true">ON</button><span class="switch-hint" id="forward-hint">Forward available results to dependent instructions (avoids some stalls).</span></div>
+  </section>
+  <section class="controlbar" aria-label="Simulation controls">
+    <div class="transport"><button class="circle-btn" id="reset" title="Reset to cycle 0" aria-label="Reset">↺</button><button class="circle-btn" id="back" title="Previous cycle (←)" aria-label="Previous cycle">‹</button><button class="play" id="play" aria-label="Play">▶ &nbsp; Play</button><button class="circle-btn" id="next" title="Next cycle (→)" aria-label="Next cycle">›</button><button class="circle-btn" id="end" title="Jump to end" aria-label="Jump to end">⇥</button></div>
+    <div class="cyclecount"><strong id="cycle">00</strong><span id="cycle-total"> / 00</span></div>
+    <div class="progress"><label for="scrub"><span>SIMULATION TIMELINE</span><span id="progress-pct">0% COMPLETE</span></label><input type="range" min="0" max="12" value="0" id="scrub" aria-label="Simulation cycle"></div>
+    <div class="speed"><label for="speed">SPEED</label><select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.75">1.75×</option><option value="3">3×</option></select></div>
+  </section>
+  <section class="totals" id="metrics" aria-label="Experiment metrics"></section>
+  <main class="dual" aria-label="Side-by-side processors">
+    <article class="cpu risc"><header class="cpu-head"><div><div class="chiplabel">Core A / Load-store model</div><h2>RISC <small>Reduced Instruction Set Computer</small></h2></div><div class="cpu-badge">5-STAGE PIPELINE</div></header><div class="cpu-stats" id="r-stats"></div><div class="cpu-body"><div class="subhead"><h3>Pipeline activity</h3><span>IF · ID · EX · MEM · WB</span></div><div class="stage-row" id="r-stages"></div><div class="activity" id="r-activity"></div><div class="subhead"><h3>Assembly program</h3><span id="r-program-count"></span></div><div class="program" id="r-program"></div><div class="subhead"><h3>Architectural state</h3><span>LIVE / CYCLE-ACCURATE MODEL</span></div><div class="state-grid" id="r-state"></div></div></article>
+    <article class="cpu cisc"><header class="cpu-head"><div><div class="chiplabel">Core B / Microcoded model</div><h2>CISC <small>Complex Instruction Set Computer</small></h2></div><div class="cpu-badge">MULTI-CYCLE ENGINE</div></header><div class="cpu-stats" id="c-stats"></div><div class="cpu-body"><div class="subhead"><h3>Micro-operation activity</h3><span>ONE INTERNAL STEP / CYCLE</span></div><div class="stage-row" id="c-stages"></div><div class="activity" id="c-activity"></div><div class="subhead"><h3>Assembly program</h3><span id="c-program-count"></span></div><div class="program" id="c-program"></div><div class="subhead"><h3>Architectural state</h3><span>LIVE / CYCLE-ACCURATE MODEL</span></div><div class="state-grid" id="c-state"></div></div></article>
+  </main>
+  <section class="bottom">
+    <article class="panel"><div class="panel-title"><div><h3>Instruction timing diagram</h3><p>Horizontal axis = shared simulated clock cycle. Select a column to jump there. Scroll for longer workloads.</p></div></div><div class="legend"><span><i class="swatch" style="background:#3c78a0"></i>Fetch / decode</span><span><i class="swatch" style="background:#177762"></i>ALU</span><span><i class="swatch" style="background:#a47d3c"></i>Memory</span><span><i class="swatch" style="background:#7b5daa"></i>Writeback</span><span><i class="swatch" style="background:#9d6947"></i>Stall</span></div><div class="timeline-scroll" id="timeline-wrap" style="margin-top:13px"><table class="timeline" id="timeline" aria-label="Cycle by cycle timing chart"></table></div></article>
+    <article class="panel"><div class="panel-title"><div><h3>Cycle inspector</h3><p>What each processor is doing right now</p></div><div class="section-sub" id="inspector-cycle">T = 00</div></div><div id="inspector"></div></article>
+  </section>
+  <section class="quiz"><div class="q"><strong>Knowledge check</strong><span id="quiz-question">What is the key load/store difference?</span></div><button data-answer="a" id="qa">RISC ALU uses registers</button><button data-answer="b" id="qb">RISC ALU directly uses memory</button><div class="quiz-feedback" id="quiz-feedback" role="status"></div></section>
+  <section class="primer" aria-label="Interpretation guidance"><div class="primer-card"><span class="cap">01 / ISA DESIGN</span><b>Instruction count ≠ execution time</b><p>CISC can express more work in one instruction; RISC often expresses it as several simpler instructions. You must also consider how those instructions are implemented.</p></div><div class="primer-card"><span class="cap">02 / IMPLEMENTATION</span><b>Pipelines versus micro-steps</b><p>The RISC teaching core overlaps instructions across five stages. The CISC teaching core uses sequential internal steps. The difference here is a <strong>model choice</strong>, not a universal law of the two ISAs.</p></div><div class="primer-card"><span class="cap">03 / REAL-WORLD SYSTEMS</span><b>Modern processors are more complex</b><p>Real x86 CPUs may translate instructions into micro-ops, pipeline, and execute them out of order. Actual speed also depends on clock rate, caches, branch behavior, compiler, and workload.</p></div></section>
+  <footer class="foot"><p><strong style="color:#c9d9e7">MODEL ASSUMPTIONS.</strong> Educational pseudo-assembly (except REP MOVSW, which reflects an x86-style repeated string move). One-cycle stages, idealized memory, in-order single-issue RISC with optional forwarding, and a deliberately non-overlapping microcoded CISC core. No cache misses, branch penalties, or frequency differences. These cycle counts are valid <em>for these models only</em> and cannot establish which ISA is faster in general. Copy experiment assumes source/destination pointers initially set up.</p><div style="white-space:nowrap">BACKGROUND: <a href="https://documentation-service.arm.com/static/6245c734b059dc5ff9a8bdab" target="_blank" rel="noopener">Arm ISA</a> · <a href="https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-2b-manual.pdf" target="_blank" rel="noopener">Intel manual</a></div></footer>
+</div>
+<script>
+'use strict';
+(()=>{
+ const el=id=>document.getElementById(id);
+ const $all=s=>Array.from(document.querySelectorAll(s));
+ const state={scenario:'add',inputs:{A:7,B:5,SRC0:4,SRC1:8,SRC2:12},forwarding:true,cycle:0,playing:false,speed:1,timer:null,plan:null};
+ const fmt=v=>v===null||v===undefined?'—':String(v);
+ const d2=v=>String(v).padStart(2,'0');
+ const escapeHTML=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const makeBase=()=>({A:state.inputs.A,B:state.inputs.B,RESULT:null,SRC0:state.inputs.SRC0,SRC1:state.inputs.SRC1,SRC2:state.inputs.SRC2,DST0:null,DST1:null,DST2:null});
+ const cmeta={add:{name:'Add two values',formula:()=>`RESULT = ${state.inputs.A} + ${state.inputs.B} = <strong>${state.inputs.A+state.inputs.B}</strong>`,question:'Which CPU completes this example in fewer modeled cycles?'},scale:{name:'Scale the sum',formula:()=>`RESULT = (${state.inputs.A} + ${state.inputs.B}) × 2 = <strong>${(state.inputs.A+state.inputs.B)*2}</strong>`,question:'What does a RISC load/store design require before ADD?'},copy:{name:'Copy three words',formula:()=>`[${[0,1,2].map(i=>state.inputs['SRC'+i]).join(', ')}] → [DST0, DST1, DST2]`,question:'What does REP MOVSW do internally?'}};
+ function riscProgram(){
+   const add=(code,kind,src,dst,extra={})=>({code,kind,src,dst,...extra});
+   if(state.scenario==='copy')return [0,1,2].flatMap(i=>[
+      add(`LD    R1, [SRC${i}]`,'LD',[],'R1',{addr:'SRC'+i,info:`Read source word ${i+1} into R1.`}),
+      add(`ST    [DST${i}], R1`,'ST',['R1'],null,{addr:'DST'+i,reg:'R1',info:`Write source word ${i+1} to destination.`})]);
+   const lines=[
+     add('LD    R1, [A]','LD',[],'R1',{addr:'A',info:'Load A from memory into R1.'}),
+     add('LD    R2, [B]','LD',[],'R2',{addr:'B',info:'Load B from memory into R2.'}),
+     add('ADD   R3, R1, R2','ADD',['R1','R2'],'R3',{info:'Add two registers in the ALU.'})
+   ];
+   if(state.scenario==='scale')lines.push(add('SHL   R3, R3, #1','SHL',['R3'],'R3',{info:'Shift left by one bit (multiply by 2).'}));
+   lines.push(add('ST    [RESULT], R3','ST',['R3'],null,{addr:'RESULT',reg:'R3',info:'Write the result from R3 to memory.'}));
+   return lines;
+ }
+ function assembleRisc(){
+  const instructions=riscProgram(),reg={R1:null,R2:null,R3:null},mem=makeBase(),lastWriter={};
+  let prior=null,stalls=0;
+  const actions=[];
+  instructions.forEach((ins,i)=>{
+    ins.id=i;ins.num=i+1;
+    const F=prior?Math.max(prior.F+1,prior.E-1):1;
+    const D=F+1;
+    let E=Math.max(D+1,prior?prior.E+1:0);
+    ins.src.forEach(s=>{
+      const p=lastWriter[s];
+      if(!p)return;
+      // With forwarding, an ALU result is available after EX, and a load after MEM.
+      // Without forwarding, the consumer may read the register when WB completes.
+      const ready=state.forwarding?(p.kind==='LD'?p.M+1:p.E+1):p.W+1;
+      E=Math.max(E,ready);
+    });
+    ins.F=F;ins.D=D;ins.E=E;ins.M=E+1;ins.W=E+2;
+    ins.stalls=Math.max(0,E-D-1);stalls+=ins.stalls;
+    if(ins.kind==='LD'){
+      const val=mem[ins.addr];
+      ins.details={F:'Fetch the load instruction.',D:`Decode address [${ins.addr}].`,E:`Calculate address of ${ins.addr}.`,M:`Read memory [${ins.addr}] = ${val}.`,W:`Commit R1/R2 ← ${val}.`};
+      reg[ins.dst]=val;
+      ins.details.W=`Write ${ins.dst} ← ${val}.`;
+      actions.push({cycle:ins.W,target:'reg',key:ins.dst,value:val,detail:`${ins.dst} ← ${val}`});
+    }else if(ins.kind==='ADD'){
+      const v=reg.R1+reg.R2;
+      ins.details={F:'Fetch ADD.',D:'Decode register operands R1 and R2.',E:`ALU computes ${reg.R1} + ${reg.R2} = ${v}.`,M:'No data-memory operation for ADD.',W:`Write R3 ← ${v}.`};
+      reg.R3=v;actions.push({cycle:ins.W,target:'reg',key:'R3',value:v,detail:`R3 ← ${v}`});
+    }else if(ins.kind==='SHL'){
+      const before=reg.R3,v=before*2;
+      ins.details={F:'Fetch SHL.',D:'Decode source register R3.',E:`ALU shifts ${before} left by 1: ${v}.`,M:'No data-memory operation for SHL.',W:`Write R3 ← ${v}.`};
+      reg.R3=v;actions.push({cycle:ins.W,target:'reg',key:'R3',value:v,detail:`R3 ← ${v}`});
+    }else if(ins.kind==='ST'){
+      const val=reg[ins.reg];mem[ins.addr]=val;
+      ins.details={F:'Fetch store instruction.',D:`Decode store to [${ins.addr}].`,E:`Calculate address; prepare ${ins.reg} = ${val}.`,M:`Memory [${ins.addr}] ← ${val}.`,W:'Store completes (no register write).'};
+      actions.push({cycle:ins.M,target:'mem',key:ins.addr,value:val,detail:`[${ins.addr}] ← ${val}`});
+    }
+    if(ins.dst)lastWriter[ins.dst]=ins;
+    prior=ins;
+  });
+  return{instructions,actions,cycles:prior.W,stalls,initialRegs:{R1:null,R2:null,R3:null},initialMem:makeBase(),finalReg:reg,finalMem:mem};
+ }
+ function assembleCisc(){
+   const mem=makeBase(),reg={AX:null,CX:state.scenario==='copy'?null:undefined,SI:state.scenario==='copy'?0:undefined,DI:state.scenario==='copy'?0:undefined};
+   const instructions=[],actions=[];let clock=0;
+   function addInstruction(code,info,steps){
+     const ins={id:instructions.length,code,info,steps:[],num:instructions.length+1};
+     steps.forEach(s=>{clock++;let step={...s,cycle:clock};ins.steps.push(step);if(s.changes)for(const c of s.changes)actions.push({cycle:clock,...c})});
+     ins.start=ins.steps[0].cycle;ins.end=clock;instructions.push(ins);
+   }
+   const phase=(phase,detail,changes)=>({phase,detail,changes:changes||[]});
+   if(state.scenario==='copy'){
+     addInstruction('MOV   CX, #3','Initialize the repetition counter.',[
+       phase('F','Fetch the counter initialization.'),phase('D','Decode MOV immediate.'),phase('W','Set CX = 3.',[{target:'reg',key:'CX',value:3,detail:'CX ← 3'}])]);reg.CX=3;
+     const s=[phase('F','Fetch REP MOVSW instruction (one ISA instruction).'),phase('D','Decode repeat prefix and word move.')];
+     for(let i=0;i<3;i++){
+       const value=mem['SRC'+i];
+       s.push(phase('M',`Iteration ${i+1}/3: read source word [SRC${i}] = ${value}.`));
+       s.push(phase('M',`Iteration ${i+1}/3: write ${value} to [DST${i}]; advance pointers and decrement CX.`,[
+         {target:'mem',key:'DST'+i,value,detail:`[DST${i}] ← ${value}`},
+         {target:'reg',key:'CX',value:2-i,detail:`CX ← ${2-i}`},
+         {target:'reg',key:'SI',value:(i+1)*2,detail:`SI ← ${(i+1)*2}`},
+         {target:'reg',key:'DI',value:(i+1)*2,detail:`DI ← ${(i+1)*2}`}
+       ]));
+       mem['DST'+i]=value;reg.CX=2-i;reg.SI=(i+1)*2;reg.DI=(i+1)*2;
+     }
+     addInstruction('REP   MOVSW','Copy 3 words using internal repetition; source/destination pointers pre-initialized.',s);
+   }else{
+     const a=mem.A,b=mem.B;
+     addInstruction('MOV   AX, [A]','Load a memory operand into AX.',[phase('F','Fetch MOV.'),phase('D','Decode memory-to-register MOV.'),phase('M',`Read [A] = ${a}.`),phase('W',`Write AX ← ${a}.`,[{target:'reg',key:'AX',value:a,detail:`AX ← ${a}`}])]);reg.AX=a;
+     const sum=a+b;
+     addInstruction('ADD   AX, [B]','Add a memory operand directly to AX.',[phase('F','Fetch ADD.'),phase('D','Decode register + memory operand.'),phase('M',`Read memory [B] = ${b}.`),phase('E',`ALU computes ${a} + ${b} = ${sum}.`),phase('W',`Write AX ← ${sum}.`,[{target:'reg',key:'AX',value:sum,detail:`AX ← ${sum}`}])]);reg.AX=sum;
+     if(state.scenario==='scale'){
+       addInstruction('SHL   AX, 1','Shift left (multiply by two).',[phase('F','Fetch SHL.'),phase('D','Decode register shift.'),phase('E',`ALU computes ${sum} × 2 = ${sum*2}.`),phase('W',`Write AX ← ${sum*2}.`,[{target:'reg',key:'AX',value:sum*2,detail:`AX ← ${sum*2}`}])]);reg.AX=sum*2;
+     }
+     addInstruction('MOV   [RESULT], AX','Store AX into memory.',[phase('F','Fetch store MOV.'),phase('D','Decode register-to-memory MOV.'),phase('M',`Memory [RESULT] ← ${reg.AX}.`,[{target:'mem',key:'RESULT',value:reg.AX,detail:`[RESULT] ← ${reg.AX}`}])]);mem.RESULT=reg.AX;
+   }
+   return{instructions,actions,cycles:clock,stalls:0,initialRegs:state.scenario==='copy'?{AX:null,CX:null,SI:0,DI:0}:{AX:null},initialMem:makeBase(),finalReg:reg,finalMem:mem};
+ }
+ function snapshot(plan,cycle){
+   const regs={...plan.initialRegs},mem={...plan.initialMem},changes=[];
+   for(const change of plan.actions){if(change.cycle<=cycle){(change.target==='reg'?regs:mem)[change.key]=change.value;if(change.cycle===cycle)changes.push(change)}}
+   return{regs,mem,changes};
+ }
+ function riscStage(ins,cycle){if(cycle===ins.F)return'F';if(cycle>=ins.D&&cycle<ins.E)return cycle===ins.D?'D':'S';if(cycle===ins.E)return'E';if(cycle===ins.M)return'M';if(cycle===ins.W)return'W';return null}
+ function ciscStep(ins,cycle){return ins.steps.find(s=>s.cycle===cycle)||null}
+ function stageShort(s){return({F:'IF',D:'ID',S:'ID !',E:'EX',M:'MEM',W:'WB'}[s]||'—')}
+ function stageLabel(phase){return({F:'FETCH',D:'DECODE',E:'EXECUTE',M:'MEMORY',W:'WRITE'}[phase]||phase)}
+ function activeRisc(cycle){return state.plan.r.instructions.map(ins=>({ins,stage:riscStage(ins,cycle)})).filter(x=>x.stage)}
+ function activeCisc(cycle){for(const ins of state.plan.c.instructions){const step=ciscStep(ins,cycle);if(step)return{ins,step}}return null}
+ function setCycle(n,autoscroll=false){const total=state.plan.total;state.cycle=Math.max(0,Math.min(total,Number(n)||0));render();if(autoscroll){const cur=el('timeline').querySelector('th[data-cyc="'+state.cycle+'"]');if(cur){const parent=el('timeline-wrap');const x=cur.offsetLeft-parent.clientWidth/2+90;parent.scrollTo({left:Math.max(0,x),behavior:'smooth'})}}if(state.cycle>=total)pause()}
+ function pause(){if(state.timer!==null){clearInterval(state.timer);state.timer=null}state.playing=false;el('play').innerHTML='▶ &nbsp; Play';el('play').setAttribute('aria-label','Play')}
+ function play(){if(state.playing){pause();return}if(state.cycle>=state.plan.total)setCycle(0);state.playing=true;el('play').innerHTML='Ⅱ &nbsp; Pause';el('play').setAttribute('aria-label','Pause');state.timer=setInterval(()=>setCycle(state.cycle+1,true),Math.round(1050/state.speed))}
+ function resetPlan(){pause();state.plan={r:assembleRisc(),c:assembleCisc()};state.plan.total=Math.max(state.plan.r.cycles,state.plan.c.cycles);state.cycle=0;renderConfig();render();buildTimeline();}
+ function renderConfig(){
+   const keys=state.scenario==='copy'?['SRC0','SRC1','SRC2']:['A','B'];
+   el('input-fields').innerHTML=keys.map(k=>`<div class="field"><label for="inp-${k}">${k}</label><input type="number" id="inp-${k}" data-key="${k}" min="-99" max="99" step="1" value="${state.inputs[k]}"></div>`).join('');
+   $all('[data-key]').forEach(node=>node.addEventListener('change',()=>{const v=Number(node.value);state.inputs[node.dataset.key]=Number.isFinite(v)?Math.max(-99,Math.min(99,Math.trunc(v))):0;resetPlan()}));
+   el('task-code').innerHTML=cmeta[state.scenario].formula();
+   el('exp-id').textContent='EXPERIMENT '+String(['add','scale','copy'].indexOf(state.scenario)+1).padStart(2,'0')+' / 03';
+   $all('[data-case]').forEach(b=>{b.classList.toggle('active',b.dataset.case===state.scenario);b.setAttribute('aria-pressed',String(b.dataset.case===state.scenario))});
+   el('forward').textContent=state.forwarding?'ON':'OFF';el('forward').classList.toggle('active',state.forwarding);el('forward').setAttribute('aria-pressed',String(state.forwarding));
+   el('forward-hint').textContent=state.forwarding?'Forward available results to dependent instructions (avoids some stalls).':'No bypass paths: consumers wait until register writeback.';
+   el('quiz-question').textContent=state.scenario==='copy'?'Which statement best explains REP MOVSW?':state.scenario==='scale'?'In the RISC model, where does ADD get its operands?':'Which architecture here allows ADD AX, [B]?';
+   el('qa').textContent=state.scenario==='copy'?'One instruction repeats word moves':state.scenario==='scale'?'From registers R1 and R2':'CISC model';
+   el('qb').textContent=state.scenario==='copy'?'No memory reads or writes occur':state.scenario==='scale'?'Directly from A and B in RAM':'RISC model';
+   el('quiz-feedback').className='quiz-feedback';$all('[data-answer]').forEach(b=>b.classList.remove('selected'));
+ }
+ function render(){
+   const {r,c,total}=state.plan,t=state.cycle;
+   el('cycle').textContent=d2(t);el('cycle-total').textContent=' / '+d2(total);el('progress-pct').textContent=Math.round(t/total*100)+'% COMPLETE';el('scrub').max=total;el('scrub').value=t;
+   el('back').disabled=t===0;el('next').disabled=t>=total;el('end').disabled=t>=total;el('reset').disabled=t===0;
+   const rp=t>=r.cycles?r.cycles:t,cp=t>=c.cycles?c.cycles:t;
+   const difference=Math.abs(r.cycles-c.cycles),winner=r.cycles<c.cycles?'RISC':c.cycles<r.cycles?'CISC':'TIE';
+   el('metrics').innerHTML=`<div class="metric r"><div class="metriclabel">RISC total cycles</div><div class="metricvalue">${r.cycles} <span style="font-size:13px;color:#78a69a">CLK</span></div><div class="metricsmall">${r.instructions.length} instructions · ${r.stalls} ID stall cycles</div></div><div class="metric c"><div class="metriclabel">CISC total cycles</div><div class="metricvalue">${c.cycles} <span style="font-size:13px;color:#ac9dcf">CLK</span></div><div class="metricsmall">${c.instructions.length} ISA instructions · ${c.cycles} micro-steps</div></div><div class="metric warn"><div class="metriclabel">Modeled cycle difference</div><div class="metricvalue">${difference} <span style="font-size:13px;color:#c8a974">CLK</span></div><div class="metricsmall">${winner==='TIE'?'Same simulated cycle count':winner+' finishes earlier in this model'}</div></div><div class="metric"><div class="metriclabel">Shared timeline position</div><div class="metricvalue">${t} <span style="font-size:13px;color:#8ea9be">/ ${total}</span></div><div class="metricsmall">${t===total?'Both programs completed':t===0?'Processors ready to start':'Execution in progress'}</div></div>`;
+   renderCpu('r',r,rp,t);renderCpu('c',c,cp,t);renderInspector();highlightTimeline();
+ }
+ function renderCpu(side,plan,localCycle,sharedCycle){
+   const isR=side==='r',snapshotNow=snapshot(plan,sharedCycle),doneCount=plan.instructions.filter(ins=>(isR?ins.W:ins.end)<=sharedCycle).length;
+   const committed=doneCount,stat=el(side+'-stats');
+   stat.innerHTML=`<div class="cpu-stat"><span>RETIRED</span><b>${committed}<span style="font-size:11px;color:#58748c"> / ${plan.instructions.length}</span></b></div><div class="cpu-stat"><span>${isR?'STALLS':'MICRO-STEPS'}</span><b class="accent">${isR?plan.instructions.reduce((n,ins)=>n+Array.from({length:Math.max(0,Math.min(sharedCycle,ins.E-1)-ins.D)},(_,k)=>ins.D+k+1).filter(v=>v<=sharedCycle).length,0):localCycle}</b></div><div class="cpu-stat"><span>STATUS</span><b style="font-size:12px;color:${sharedCycle>=plan.cycles?'var(--r)':'#d5e1ec'}">${sharedCycle===0?'READY':sharedCycle>=plan.cycles?'DONE':'RUNNING'}</b></div>`;
+   if(isR){
+     const act=activeRisc(sharedCycle);
+     const names=['F','D','E','M','W'];
+     el('r-stages').innerHTML=names.map(stage=>{const a=act.find(x=>x.stage===stage||(stage==='D'&&x.stage==='S'));return`<div class="stage ${a?'active':''} ${a&&a.stage==='S'?'stalled':''}"><span class="stage-name">${stageShort(stage)}</span><span class="stage-code">${a?'#'+d2(a.ins.num)+' '+a.ins.kind:'—'}</span></div>`}).join('');
+     const stall=act.find(x=>x.stage==='S');
+     const priority=act.find(x=>x.stage==='M'||x.stage==='E'||x.stage==='W')||act.find(x=>x.stage==='D')||act[0];
+     el('r-activity').className='activity'+(act.length?'':' idle');
+     el('r-activity').innerHTML=`<i class="activity-pulse"></i><div class="act-label">${stall?'<b>DATA HAZARD:</b> Instruction #'+stall.ins.num+' held in ID; waiting for operand.':priority?'<b>'+stageShort(priority.stage)+':</b> '+escapeHTML(priority.ins.details[priority.stage]||priority.ins.info):sharedCycle>=plan.cycles?'<b>Complete:</b> program has finished.':'Waiting for clock.'}</div>`;
+   }else{
+     const cur=activeCisc(sharedCycle),phases=['F','D','M','E','W'];
+     el('c-stages').innerHTML=phases.map(stage=>`<div class="stage ${cur&&cur.step.phase===stage?'active':''}"><span class="stage-name">${stageLabel(stage)}</span><span class="stage-code">${cur&&cur.step.phase===stage?'#'+d2(cur.ins.num):'—'}</span></div>`).join('');
+     el('c-activity').className='activity'+(cur?'':' idle');
+     el('c-activity').innerHTML=`<i class="activity-pulse"></i><div class="act-label">${cur?'<b>'+stageLabel(cur.step.phase)+':</b> '+escapeHTML(cur.step.detail):sharedCycle>=plan.cycles?'<b>Complete:</b> program has finished.':'Waiting for clock.'}</div>`;
+   }
+   el(side+'-program-count').textContent=plan.instructions.length+' ISA INSTRUCTIONS';
+   el(side+'-program').innerHTML=`<div class="program-h"><span>ADDRESS / MNEMONIC</span><span>EXECUTION</span></div>`+plan.instructions.map(ins=>{
+     const start=isR?ins.F:ins.start,end=isR?ins.W:ins.end;
+     const current=sharedCycle>=start&&sharedCycle<=end,past=sharedCycle>end;
+     return`<button type="button" class="ins ${current?'current':past?'past':''}" data-seek="${start}" title="Click to jump to start · ${escapeHTML(ins.info)}"><span class="ins-n">${d2(ins.num)}</span><code>${escapeHTML(ins.code)}</code><span class="ins-status">${past?'✓ DONE':current?'● LIVE':'○ WAIT'}</span></button>`
+   }).join('');
+   el(side+'-program').querySelectorAll('[data-seek]').forEach(btn=>btn.addEventListener('click',()=>{pause();setCycle(Number(btn.dataset.seek),true)}));
+   const wantedMem=state.scenario==='copy'?['SRC0','SRC1','SRC2','DST0','DST1','DST2']:['A','B','RESULT'];
+   const regKeys=isR?['R1','R2','R3']:state.scenario==='copy'?['AX','CX','SI','DI']:['AX'];
+   const changedKeys=new Set(snapshotNow.changes.map(ch=>ch.target+':'+ch.key));
+   const regsHtml=regKeys.map(k=>stateLine(k,snapshotNow.regs[k],changedKeys.has('reg:'+k))).join('');
+   const memHtml=wantedMem.map(k=>stateLine('['+k+']',snapshotNow.mem[k],changedKeys.has('mem:'+k))).join('');
+   el(side+'-state').innerHTML=`<div class="state-box"><div class="state-label">REGISTERS</div>${regsHtml}</div><div class="state-box"><div class="state-label">DATA MEMORY</div>${memHtml}</div>`;
+ }
+ function stateLine(key,value,changed){return`<div class="state-line ${changed?'changed':''}"><span class="addr">${escapeHTML(key)}</span><span class="value ${value===null||value===undefined?'empty':''}">${escapeHTML(fmt(value))}</span></div>`}
+ function renderInspector(){
+   const t=state.cycle,{r,c,total}=state.plan,rr=activeRisc(t),cc=activeCisc(t);
+   el('inspector-cycle').textContent='T = '+d2(t);
+   if(t===0){el('inspector').innerHTML=`<div class="insight"><div class="eyebrow">SYSTEM READY</div><h4>Press Play to begin the comparison.</h4><p>Every tick advances both modeled CPUs by one clock cycle. Inspect which instructions overlap and which execute through internal steps.</p></div><div class="log"><div class="log-row r"><span>RISC</span>Pipeline empty; ready to fetch instruction #1.</div><div class="log-row c"><span>CISC</span>Microcoded engine ready to fetch instruction #1.</div></div>`;return}
+   const stalled=rr.filter(v=>v.stage==='S');
+   const rEvent=rr.map(({ins,stage})=>({stage,ins,detail:stage==='S'?`Holding ${ins.code}: waiting for a dependency.`:ins.details[stage]}));
+   const cEvent=cc?cc.step.detail:'Instruction sequence complete.';
+   const rCommit=snapshot(r,t).changes,cCommit=snapshot(c,t).changes;
+   let headline=t===total?'Both processors reached the same answer.':stalled.length?'A RISC dependency is creating a pipeline stall.':rEvent.length>1?'The RISC pipeline is overlapping instructions.':'Two execution strategies, one clock.';
+   const insight=stalled.length?'A dependent instruction cannot safely advance until its input is available. Forwarding reduces some stalls but does not always remove load-use delays.':t===total?'Compare the instruction counts, total modeled cycles, and final memory state. These numbers reflect the demonstration processors, not all RISC and CISC hardware.':rr.length>1?'Multiple RISC instructions occupy different stages in the same cycle, while this CISC core advances one micro-step. This overlap is called pipelining.':'The CPUs follow the same workload with different instruction sequences and internal execution schedules.';
+   const rlog=rEvent.length?rEvent.map(x=>`<div class="log-row r"><span>${stageShort(x.stage)}</span>${escapeHTML(x.detail)}</div>`).join(''):'<div class="log-row r"><span>RISC</span>Program complete.</div>';
+   const clog=`<div class="log-row c"><span>${cc?stageLabel(cc.step.phase):'CISC'}</span>${escapeHTML(cEvent)}</div>`;
+   const writes=[...rCommit.map(x=>'<span style="color:var(--r)">RISC '+escapeHTML(x.detail)+'</span>'),...cCommit.map(x=>'<span style="color:var(--c)">CISC '+escapeHTML(x.detail)+'</span>')];
+   el('inspector').innerHTML=`<div class="insight"><div class="eyebrow">CYCLE ${d2(t)} / ${d2(total)}</div><h4>${headline}</h4><p>${insight}</p></div><div class="subhead"><h3>Events this cycle</h3><span>${rEvent.length+(cc?1:0)} ACTIVE OPERATION${rEvent.length+(cc?1:0)===1?'':'S'}</span></div><div class="log">${rlog}${clog}${writes.length?'<div class="log-row" style="border-color:#b4cedd"><span>STATE</span>'+writes.join(' · ')+'</div>':''}</div>${t===total?'<div class="completed">✓ &nbsp; Both workloads finished. Output states match.</div>':''}`;
+ }
+ function buildTimeline(){
+   const {r,c,total}=state.plan;
+   const header=`<thead><tr><th class="first">INSTRUCTION ↓</th>${Array.from({length:total},(_,i)=>`<th data-cyc="${i+1}">${d2(i+1)}</th>`).join('')}</tr></thead>`;
+   function row(ins,isR){
+     let cells='';
+     for(let t=1;t<=total;t++){
+       const s=isR?riscStage(ins,t):ciscStep(ins,t);
+       const label=isR?(s==='S'?'!':s||''):(s?s.phase:'');
+       const cls=isR?('s-'+s):('s-C'+(s?s.phase:''));
+       const details=isR&&s?ins.details[s==='S'?'D':s]:!isR&&s?s.detail:'';
+       cells+=`<td data-cycle="${t}" class="${s?cls:''}" title="${escapeHTML(details||'Cycle '+t)}">${label}</td>`;
+     }
+     return`<tr><td class="first"><span class="${isR?'side-r':'side-c'}">${isR?'R':'C'}</span> · ${escapeHTML(ins.code.split(' ').filter(Boolean)[0])} #${ins.num}</td>${cells}</tr>`;
+   }
+   const separator=`<tr class="separate"><td colspan="${total+1}"></td></tr>`;
+   el('timeline').innerHTML=header+'<tbody>'+r.instructions.map(x=>row(x,true)).join('')+separator+c.instructions.map(x=>row(x,false)).join('')+'</tbody>';
+   el('timeline').querySelectorAll('[data-cycle]').forEach(n=>n.addEventListener('click',()=>{pause();setCycle(+n.dataset.cycle)}));
+   el('timeline').querySelectorAll('th[data-cyc]').forEach(n=>{n.style.cursor='pointer';n.title='Jump to cycle '+n.dataset.cyc;n.addEventListener('click',()=>{pause();setCycle(+n.dataset.cyc)})});
+   highlightTimeline();
+ }
+ function highlightTimeline(){
+   const t=state.cycle;
+   el('timeline').querySelectorAll('td[data-cycle],th[data-cyc]').forEach(cell=>{
+     const x=Number(cell.dataset.cycle||cell.dataset.cyc);
+     cell.classList.toggle('now',x===t);cell.classList.toggle('future',x>t);
+   });
+ }
+ $all('[data-case]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.case===state.scenario)return;state.scenario=btn.dataset.case;resetPlan()}));
+ el('forward').addEventListener('click',()=>{state.forwarding=!state.forwarding;resetPlan()});
+ el('play').addEventListener('click',play);
+ el('reset').addEventListener('click',()=>{pause();setCycle(0,true)});
+ el('back').addEventListener('click',()=>{pause();setCycle(state.cycle-1,true)});
+ el('next').addEventListener('click',()=>{pause();setCycle(state.cycle+1,true)});
+ el('end').addEventListener('click',()=>{pause();setCycle(state.plan.total,true)});
+ el('scrub').addEventListener('input',e=>{pause();setCycle(e.target.value)});
+ el('speed').addEventListener('change',e=>{state.speed=Number(e.target.value);if(state.playing){pause();play()}});
+ el('fullscreen').addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.()}});
+ document.addEventListener('keydown',e=>{if(/input|select|textarea/i.test(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight'){e.preventDefault();pause();setCycle(state.cycle+1,true)}if(e.key==='ArrowLeft'){e.preventDefault();pause();setCycle(state.cycle-1,true)}if(e.code==='Space'){e.preventDefault();play()}});
+ $all('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{
+   const correct=btn.dataset.answer==='a',fb=el('quiz-feedback');
+   $all('[data-answer]').forEach(b=>b.classList.toggle('selected',b===btn));
+   fb.className='quiz-feedback show '+(correct?'good':'bad');
+   fb.textContent=correct?(state.scenario==='copy'?'Correct. REP MOVSW repeats memory-to-memory word transfers under a count register.':state.scenario==='scale'?'Correct. RISC ALU operations consume registers; loads bring data from memory.':'Correct. The illustrated CISC ADD uses a memory operand; RISC ADD uses registers.'):(state.scenario==='copy'?'Not quite. REP MOVSW carries out multiple memory reads and writes internally.':state.scenario==='scale'?'Not quite. The operands must be loaded into registers before the RISC ADD.':'Not quite. The RISC ALU in this model does not accept a direct memory operand.');
+ }));
+ resetPlan();
+})();
+</script>
+</body>
+</html>
